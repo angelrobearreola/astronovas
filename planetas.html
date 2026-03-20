@@ -100,6 +100,27 @@ planetData.forEach(data=>{
     scene.add(mesh);
     planets.push(mesh);
 
+    // --- Fondo de galaxia con textura ---
+const loader = new THREE.TextureLoader();
+loader.load('https://cdn.pixabay.com/photo/2016/03/31/19/56/galaxy-1293831_1280.jpg', function(texture){
+    scene.background = texture;
+});
+
+// --- Estrellas dinámicas ---
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 500;
+const starVertices = [];
+for(let i=0;i<starCount;i++){
+    const x = (Math.random()-0.5)*400;
+    const y = (Math.random()-0.5)*400;
+    const z = (Math.random()-0.5)*400;
+    starVertices.push(x,y,z);
+}
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices,3));
+const starMaterial = new THREE.PointsMaterial({color:0xffffff, size:0.5});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
     // Órbita visual
     const orbitGeometry = new THREE.RingGeometry(data.distance - 0.01, data.distance + 0.01, 64);
     const orbitMaterial = new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide, transparent:true, opacity:0.2});
@@ -122,21 +143,58 @@ for(let i=0; i<200; i++){
 // Cámara
 camera.position.set(0,20,70);
 
-// Raycaster para clic
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-const infoBox = document.getElementById('info');
+// Detectar click o touch
+function onClickOrTouch(event){
+    let x, y;
+    if(event.touches){ // touch
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+    } else { // mouse
+        x = event.clientX;
+        y = event.clientY;
+    }
+    mouse.x = (x/window.innerWidth)*2 - 1;
+    mouse.y = -(y/window.innerHeight)*2 + 1;
 
-window.addEventListener('click', e=>{
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse,camera);
     const intersects = raycaster.intersectObjects(planets);
     if(intersects.length>0){
         const p = intersects[0].object;
         infoBox.innerHTML = `<h2>${p.userData.name}</h2><p>${p.userData.info}</p>`;
     }
-});
+}
+
+window.addEventListener('click', onClickOrTouch);
+window.addEventListener('touchstart', onClickOrTouch);
+
+// Raycaster para clic
+function onClickOrTouch(event){
+    let x, y;
+
+    if(event.touches){ // Evento táctil
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+    } else { // Evento mouse
+        x = event.clientX;
+        y = event.clientY;
+    }
+
+    // Convertir a coordenadas normalizadas de Three.js
+    mouse.x = (x / window.innerWidth) * 2 - 1;
+    mouse.y = -(y / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(planets);
+    if(intersects.length > 0){
+        const p = intersects[0].object;
+        infoBox.innerHTML = `<h2>${p.userData.name}</h2><p>${p.userData.info}</p>`;
+    }
+}
+
+// Para desktop
+window.addEventListener('click', onClickOrTouch);
+// Para dispositivos táctiles
+window.addEventListener('touchstart', onClickOrTouch);
 
 // Animación
 function animate(){
@@ -144,7 +202,7 @@ function animate(){
 
     const time = Date.now() * 0.0001;
     planets.forEach((planet, index)=>{
-        planet.rotation.y += 0.005;
+        planet.rotation.y += 0.002;
         const angle = time * (index+1) * 2;
         planet.position.x = planetData[index].distance * Math.cos(angle);
         planet.position.z = planetData[index].distance * Math.sin(angle);
@@ -169,6 +227,7 @@ window.addEventListener('resize', ()=>{
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
+stars.rotation.y += 0.0003; // gira lentamente
 });
 </script>
 </body>
