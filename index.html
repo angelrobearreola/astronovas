@@ -1,56 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Astronovas | Universo 3D</title>
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Astronovas | Club Astronómico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<div id="galaxy-bg"></div>
+<canvas id="stars"></canvas>
 
 <header>
-  <h1>Astronovas</h1>
-  <p>Club Astronómico CBTIS No. 4</p>
+    <h1 class="fade-in">ASTRONOVAS</h1>
+    <p class="fade-in">Club Astronómico CBTIS No. 4</p>
 </header>
 
+<nav>
+    <a href="#about">Nosotros</a>
+    <a href="#temas">Temas</a>
+    <a href="#galeria">Galería</a>
+    <a href="#unete">Únete</a>
+</nav>
+
 <section class="hero">
-  <h2>Explora el Universo</h2>
-  <p>Viaja entre galaxias, planetas y estrellas</p>
+    <h2 id="typing"></h2>
 </section>
 
-<section class="content">
-  <h2>El Universo</h2>
-  <div class="grid">
-    <div class="card">
-      <img src="https://images-assets.nasa.gov/image/PIA12235/PIA12235~orig.jpg">
-      <h3>Planetas</h3>
-      <p>Mundos fascinantes orbitando estrellas.</p>
-    </div>
+<section id="about" class="fade-section">
+    <h2>¿Quiénes somos?</h2>
+    <p>
+        Astronovas es un club enfocado en la exploración del universo,
+        fomentando la ciencia, la curiosidad y el pensamiento crítico.
+    </p>
+</section>
 
-    <div class="card">
-      <img src="https://images-assets.nasa.gov/image/PIA03606/PIA03606~orig.jpg">
-      <h3>Galaxias</h3>
-      <p>Millones de estrellas formando sistemas enormes.</p>
-    </div>
+<section id="temas" class="fade-section">
+    <h2>Áreas de estudio</h2>
 
-    <div class="card">
-      <img src="https://images-assets.nasa.gov/image/PIA16695/PIA16695~orig.jpg">
-      <h3>Agujeros Negros</h3>
-      <p>Gravedad extrema que deforma el espacio.</p>
+    <div class="cards">
+        <div class="card">🌌 Universo</div>
+        <div class="card">⭐ Estrellas</div>
+        <div class="card">🪐 Planetas</div>
+        <div class="card">🕳️ Agujeros negros</div>
+        <div class="card">🔭 Observación</div>
+        <div class="card">🚀 Exploración</div>
     </div>
-  </div>
+</section>
+
+<section id="galeria" class="fade-section">
+    <h2>Galería</h2>
+    <div class="galeria">
+        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564">
+        <img src="https://images.unsplash.com/photo-1447433819943-74a20887a5c1">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa">
+    </div>
+</section>
+
+<section id="unete" class="cta fade-section">
+    <h2>Únete</h2>
+    <form id="form">
+        <input type="text" placeholder="Nombre" required>
+        <input type="email" placeholder="Correo" required>
+        <button type="submit">Registrarme</button>
+    </form>
 </section>
 
 <footer>
-  <p>© 2026 Astronovas</p>
+    <p>© 2026 Astronovas 🚀</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
-

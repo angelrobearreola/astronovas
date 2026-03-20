@@ -1,68 +1,62 @@
-const scene = new THREE.Scene();
+// 🌌 estrellas
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById("galaxy-bg").appendChild(renderer.domElement);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-// ESTRELLAS
-const starsGeometry = new THREE.BufferGeometry();
-const starCount = 6000;
-const positions = [];
+let stars = [];
 
-for (let i = 0; i < starCount; i++) {
-  positions.push((Math.random() - 0.5) * 1000);
-  positions.push((Math.random() - 0.5) * 1000);
-  positions.push((Math.random() - 0.5) * 1000);
+for (let i = 0; i < 150; i++) {
+    stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        size: Math.random()*2
+    });
 }
 
-starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
-const stars = new THREE.Points(starsGeometry, starsMaterial);
-scene.add(stars);
+    stars.forEach(s => {
+        ctx.fillStyle = "white";
+        ctx.fillRect(s.x,s.y,s.size,s.size);
+    });
 
-// PLANETAS
-const planets = [];
-for (let i = 0; i < 3; i++) {
-  const geo = new THREE.SphereGeometry(2, 32, 32);
-  const mat = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
-  const planet = new THREE.Mesh(geo, mat);
-  planet.position.x = (i + 1) * 10;
-  planets.push(planet);
-  scene.add(planet);
+    requestAnimationFrame(draw);
 }
 
-// ESTRELLA FUGAZ
-let shootingStar = new THREE.Mesh(
-  new THREE.SphereGeometry(0.3),
-  new THREE.MeshBasicMaterial({ color: 0xffffff })
-);
-scene.add(shootingStar);
+draw();
 
-camera.position.z = 5;
 
-function animate() {
-  requestAnimationFrame(animate);
+// ✨ scroll animación
+const sections = document.querySelectorAll(".fade-section");
 
-  stars.rotation.y += 0.0005;
+window.addEventListener("scroll", () => {
+    sections.forEach(sec => {
+        if (sec.getBoundingClientRect().top < window.innerHeight - 100) {
+            sec.classList.add("visible");
+        }
+    });
+});
 
-  planets.forEach((p, i) => {
-    p.rotation.y += 0.01;
-    p.position.x = Math.cos(Date.now() * 0.0003 + i) * 15;
-    p.position.z = Math.sin(Date.now() * 0.0003 + i) * 15;
-  });
 
-  // estrella fugaz
-  shootingStar.position.x += 0.5;
-  shootingStar.position.y -= 0.3;
+// ⌨️ efecto typing
+const text = "Explora el universo, expande tu mente.";
+let i = 0;
 
-  if (shootingStar.position.x > 50) {
-    shootingStar.position.x = -50;
-    shootingStar.position.y = Math.random() * 20;
-  }
-
-  renderer.render(scene, camera);
+function typing() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typing, 40);
+    }
 }
+typing();
 
-animate();
+
+// 📩 formulario
+document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
+    alert("🚀 Registro enviado correctamente");
+});
