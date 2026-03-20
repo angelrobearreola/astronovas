@@ -1,11 +1,12 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: black;
-  color: #d4af37;
+  color: #e6e6e6;
   overflow-x: hidden;
-}
 
+  background: radial-gradient(circle at 20% 30%, #0b0f2a, #000814 70%);
+  cursor: url('https://cur.cursors-4u.net/symbols/sym-1/sym46.cur'), auto;
+}
 /* FONDO */
 #stars {
   position: fixed;
@@ -54,12 +55,20 @@ nav a:hover {
   justify-content: center;
   flex-wrap: wrap;
 }
+.card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
 
 .card {
-  border: 1px solid gold;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 15px;
   padding: 20px;
   width: 250px;
-  transition: 0.3s;
+  transition: 0.4s;
 }
 
 .card:hover {
