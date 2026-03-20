@@ -28,8 +28,7 @@
 </head>
 <body>
 <div id="info">
-    <h2>Haz clic en un planeta</h2>
-    <p>Información aparecerá aquí</p>
+    
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -73,10 +72,10 @@ const planetData = [
     {name:"Venus", radius:0.95, distance:7, texture:"https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg", info:"Diámetro: 12,104 km | Distancia al Sol: 108 millones km | Periodo orbital: 225 días | Composición: roca y atmósfera densa"},
     {name:"Tierra", radius:1, distance:10, texture:"https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg", info:"Diámetro: 12,742 km | Distancia al Sol: 149,6 millones km | Periodo orbital: 365 días | Composición: roca, agua y atmósfera"},
     {name:"Marte", radius:0.53, distance:13, texture:"https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg", info:"Diámetro: 6,779 km | Distancia al Sol: 227,9 millones km | Periodo orbital: 687 días | Composición: roca y hierro"},
-    {name:"Júpiter", radius:11.2, distance:18, texture:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg", info:"Diámetro: 139,820 km | Distancia al Sol: 778 millones km | Periodo orbital: 11,86 años | Composición: gas gigante"},
-    {name:"Saturno", radius:9.45, distance:24, texture:"https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg", info:"Diámetro: 116,460 km | Distancia al Sol: 1,429 millones km | Periodo orbital: 29,5 años | Composición: gas gigante"},
-    {name:"Urano", radius:4, distance:30, texture:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg", info:"Diámetro: 50,724 km | Distancia al Sol: 2,871 millones km | Periodo orbital: 84 años | Composición: gas y hielo"},
-    {name:"Neptuno", radius:3.88, distance:35, texture:"https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg", info:"Diámetro: 49,244 km | Distancia al Sol: 4,495 millones km | Periodo orbital: 165 años | Composición: gas y hielo"}
+    {name:"Júpiter", radius:8.2, distance:18, texture:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg", info:"Diámetro: 139,820 km | Distancia al Sol: 778 millones km | Periodo orbital: 11,86 años | Composición: gas gigante"},
+    {name:"Saturno", radius:6.45, distance:24, texture:"https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg", info:"Diámetro: 116,460 km | Distancia al Sol: 1,429 millones km | Periodo orbital: 29,5 años | Composición: gas gigante"},
+    {name:"Urano", radius:3.1, distance:30, texture:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg", info:"Diámetro: 50,724 km | Distancia al Sol: 2,871 millones km | Periodo orbital: 84 años | Composición: gas y hielo"},
+    {name:"Neptuno", radius:2.50, distance:35, texture:"https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg", info:"Diámetro: 49,244 km | Distancia al Sol: 4,495 millones km | Periodo orbital: 165 años | Composición: gas y hielo"}
 ];
 
 // Crear planetas y etiquetas
@@ -202,7 +201,7 @@ function animate(){
 
     const time = Date.now() * 0.0001;
     planets.forEach((planet, index)=>{
-        planet.rotation.y += 0.002;
+        planet.rotation.y += 0.001;
         const angle = time * (index+1) * 2;
         planet.position.x = planetData[index].distance * Math.cos(angle);
         planet.position.z = planetData[index].distance * Math.sin(angle);
