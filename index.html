@@ -2,90 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Astronovas | Club Astronómico CBTIS No. 4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <title>Club Astronómico Estelar</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+    <!-- Fondo de galaxia animada -->
+    <canvas id="galaxy"></canvas>
 
-<canvas id="space"></canvas>
+    <header>
+        <h1>Club Astronómico Estelar</h1>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#sobre">Sobre Nosotros</a>
+            <a href="#actividades">Actividades</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
 
-<header>
-    <h1>ASTRONOVAS</h1>
-    <p>Club Astronómico CBTIS No. 4 | Lerdo, Durango</p>
-</header>
+    <section id="inicio" class="section">
+        <h2>Bienvenidos al Universo</h2>
+        <p>Explora las maravillas del cosmos con nosotros. Observaciones, talleres y eventos astronómicos cada mes.</p>
+        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa" alt="Telescopio" class="image-center">
+    </section>
 
-<nav>
-    <a href="#about">Nosotros</a>
-    <a href="#astro">Astronomía</a>
-    <a href="#temas">Temas</a>
-    <a href="#datos">Datos</a>
-    <a href="#unete">Únete</a>
-</nav>
+    <section id="sobre" class="section">
+        <h2>Sobre Nosotros</h2>
+        <p>Somos un club dedicado a la astronomía amateur y científica. Nuestro objetivo es compartir el conocimiento del universo con la comunidad.</p>
+    </section>
 
-<section class="hero">
-    <h2 id="typing"></h2>
-</section>
+    <section id="actividades" class="section">
+        <h2>Actividades</h2>
+        <ul>
+            <li>Observación de estrellas y planetas</li>
+            <li>Talleres de astronomía</li>
+            <li>Charlas y conferencias</li>
+            <li>Proyectos educativos con escuelas</li>
+        </ul>
+    </section>
 
-<section id="about" class="fade">
-    <h2>¿Quiénes somos?</h2>
-    <p>
-        Astronovas es un club académico dedicado a la divulgación de la astronomía,
-        el estudio del universo y la observación astronómica. Promovemos el pensamiento
-        científico, la curiosidad y el desarrollo intelectual en estudiantes de nivel medio superior.
-    </p>
-</section>
+    <section id="contacto" class="section">
+        <h2>Contacto</h2>
+        <form id="contactForm">
+            <input type="text" placeholder="Nombre" required>
+            <input type="email" placeholder="Correo" required>
+            <textarea placeholder="Mensaje" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
 
-<section id="astro" class="fade">
-    <h2>¿Qué es la astronomía?</h2>
-    <p>
-        La astronomía es la ciencia que estudia los cuerpos celestes y los fenómenos del universo.
-        Incluye el análisis de estrellas, planetas, galaxias, materia oscura y energía oscura.
-        Se basa en principios de la física y las matemáticas para comprender el origen y evolución del cosmos.
-    </p>
-</section>
+    <footer>
+        <p>&copy; 2026 Club Astronómico Estelar | Síguenos en nuestras redes sociales</p>
+    </footer>
 
-<section id="temas" class="fade">
-    <h2>Áreas de estudio</h2>
-
-    <div class="cards">
-        <div class="card">🌌 Cosmología: origen y expansión del universo</div>
-        <div class="card">⭐ Astrofísica: propiedades de estrellas</div>
-        <div class="card">🪐 Planetología: estudio de planetas</div>
-        <div class="card">🕳️ Agujeros negros y relatividad</div>
-        <div class="card">🔭 Observación astronómica</div>
-        <div class="card">🚀 Exploración espacial</div>
-    </div>
-</section>
-
-<section id="datos" class="fade">
-    <h2>Datos interesantes</h2>
-
-    <div class="cards">
-        <div class="card">La luz del Sol tarda 8 minutos en llegar a la Tierra.</div>
-        <div class="card">Existen más galaxias que granos de arena en la Tierra.</div>
-        <div class="card">Un agujero negro puede curvar el espacio-tiempo.</div>
-        <div class="card">El universo tiene aproximadamente 13.8 mil millones de años.</div>
-    </div>
-</section>
-
-<section id="unete" class="cta fade">
-    <h2>Únete a Astronovas</h2>
-
-    <form id="form">
-        <input type="text" placeholder="Nombre" required>
-        <input type="email" placeholder="Correo" required>
-        <button type="submit">Registrarme</button>
-    </form>
-</section>
-
-<footer>
-    <p>© 2026 Astronovas | Explorando el universo 🚀</p>
-</footer>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
