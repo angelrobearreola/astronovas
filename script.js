@@ -1,5 +1,5 @@
-// 🌌 estrellas
-const canvas = document.getElementById("stars");
+// 🌌 Espacio animado
+const canvas = document.getElementById("space");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
@@ -7,56 +7,57 @@ canvas.height = window.innerHeight;
 
 let stars = [];
 
-for (let i = 0; i < 150; i++) {
+for (let i = 0; i < 300; i++) {
     stars.push({
         x: Math.random()*canvas.width,
         y: Math.random()*canvas.height,
-        size: Math.random()*2
+        size: Math.random()*2,
+        speed: Math.random()*0.5
     });
 }
 
-function draw() {
+function animateStars() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     stars.forEach(s => {
+        s.y += s.speed;
+        if (s.y > canvas.height) s.y = 0;
+
         ctx.fillStyle = "white";
-        ctx.fillRect(s.x,s.y,s.size,s.size);
+        ctx.fillRect(s.x, s.y, s.size, s.size);
     });
 
-    requestAnimationFrame(draw);
+    requestAnimationFrame(animateStars);
 }
 
-draw();
+animateStars();
 
-
-// ✨ scroll animación
-const sections = document.querySelectorAll(".fade-section");
+// ✨ Scroll animations
+const elements = document.querySelectorAll(".fade");
 
 window.addEventListener("scroll", () => {
-    sections.forEach(sec => {
-        if (sec.getBoundingClientRect().top < window.innerHeight - 100) {
-            sec.classList.add("visible");
+    elements.forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+            el.classList.add("show");
         }
     });
 });
 
-
-// ⌨️ efecto typing
-const text = "Explora el universo, expande tu mente.";
+// ⌨️ Efecto typing
+const text = "Explora el universo. Comprende la realidad.";
 let i = 0;
 
 function typing() {
     if (i < text.length) {
         document.getElementById("typing").innerHTML += text.charAt(i);
         i++;
-        setTimeout(typing, 40);
+        setTimeout(typing, 35);
     }
 }
 typing();
 
-
-// 📩 formulario
+// 📩 Formulario
 document.getElementById("form").addEventListener("submit", e => {
     e.preventDefault();
-    alert("🚀 Registro enviado correctamente");
+    alert("🚀 Bienvenido a Astronovas");
 });

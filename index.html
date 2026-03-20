@@ -2,27 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Astronovas | Club Astronómico</title>
+    <title>Astronovas | Club Astronómico CBTIS No. 4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="style.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
+<canvas id="space"></canvas>
 
 <header>
-    <h1 class="fade-in">ASTRONOVAS</h1>
-    <p class="fade-in">Club Astronómico CBTIS No. 4</p>
+    <h1>ASTRONOVAS</h1>
+    <p>Club Astronómico CBTIS No. 4 | Lerdo, Durango</p>
 </header>
 
 <nav>
     <a href="#about">Nosotros</a>
+    <a href="#astro">Astronomía</a>
     <a href="#temas">Temas</a>
-    <a href="#galeria">Galería</a>
+    <a href="#datos">Datos</a>
     <a href="#unete">Únete</a>
 </nav>
 
@@ -30,38 +30,51 @@
     <h2 id="typing"></h2>
 </section>
 
-<section id="about" class="fade-section">
+<section id="about" class="fade">
     <h2>¿Quiénes somos?</h2>
     <p>
-        Astronovas es un club enfocado en la exploración del universo,
-        fomentando la ciencia, la curiosidad y el pensamiento crítico.
+        Astronovas es un club académico dedicado a la divulgación de la astronomía,
+        el estudio del universo y la observación astronómica. Promovemos el pensamiento
+        científico, la curiosidad y el desarrollo intelectual en estudiantes de nivel medio superior.
     </p>
 </section>
 
-<section id="temas" class="fade-section">
+<section id="astro" class="fade">
+    <h2>¿Qué es la astronomía?</h2>
+    <p>
+        La astronomía es la ciencia que estudia los cuerpos celestes y los fenómenos del universo.
+        Incluye el análisis de estrellas, planetas, galaxias, materia oscura y energía oscura.
+        Se basa en principios de la física y las matemáticas para comprender el origen y evolución del cosmos.
+    </p>
+</section>
+
+<section id="temas" class="fade">
     <h2>Áreas de estudio</h2>
 
     <div class="cards">
-        <div class="card">🌌 Universo</div>
-        <div class="card">⭐ Estrellas</div>
-        <div class="card">🪐 Planetas</div>
-        <div class="card">🕳️ Agujeros negros</div>
-        <div class="card">🔭 Observación</div>
-        <div class="card">🚀 Exploración</div>
+        <div class="card">🌌 Cosmología: origen y expansión del universo</div>
+        <div class="card">⭐ Astrofísica: propiedades de estrellas</div>
+        <div class="card">🪐 Planetología: estudio de planetas</div>
+        <div class="card">🕳️ Agujeros negros y relatividad</div>
+        <div class="card">🔭 Observación astronómica</div>
+        <div class="card">🚀 Exploración espacial</div>
     </div>
 </section>
 
-<section id="galeria" class="fade-section">
-    <h2>Galería</h2>
-    <div class="galeria">
-        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564">
-        <img src="https://images.unsplash.com/photo-1447433819943-74a20887a5c1">
-        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa">
+<section id="datos" class="fade">
+    <h2>Datos interesantes</h2>
+
+    <div class="cards">
+        <div class="card">La luz del Sol tarda 8 minutos en llegar a la Tierra.</div>
+        <div class="card">Existen más galaxias que granos de arena en la Tierra.</div>
+        <div class="card">Un agujero negro puede curvar el espacio-tiempo.</div>
+        <div class="card">El universo tiene aproximadamente 13.8 mil millones de años.</div>
     </div>
 </section>
 
-<section id="unete" class="cta fade-section">
-    <h2>Únete</h2>
+<section id="unete" class="cta fade">
+    <h2>Únete a Astronovas</h2>
+
     <form id="form">
         <input type="text" placeholder="Nombre" required>
         <input type="email" placeholder="Correo" required>
@@ -70,7 +83,7 @@
 </section>
 
 <footer>
-    <p>© 2026 Astronovas 🚀</p>
+    <p>© 2026 Astronovas | Explorando el universo 🚀</p>
 </footer>
 
 <script src="script.js"></script>
