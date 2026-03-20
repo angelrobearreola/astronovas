@@ -57,3 +57,70 @@ window.onload = function () {
 
   animateStars();
 };
+window.addEventListener("scroll", () => {
+  const scroll = window.scrollY;
+  const canvas = document.getElementById("stars");
+
+  canvas.style.transform = `translateY(${scroll * 0.3}px)`;
+});
+document.addEventListener("mousemove", (e) => {
+  const ctx = document.getElementById("stars").getContext("2d");
+
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.arc(e.clientX, e.clientY, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+});
+// GALAXIA 3D
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.getElementById("galaxy-bg").appendChild(renderer.domElement);
+
+// CREAR ESTRELLAS (galaxia)
+const starsGeometry = new THREE.BufferGeometry();
+const starCount = 5000;
+
+const positions = [];
+
+for (let i = 0; i < starCount; i++) {
+  positions.push((Math.random() - 0.5) * 1000);
+  positions.push((Math.random() - 0.5) * 1000);
+  positions.push((Math.random() - 0.5) * 1000);
+}
+
+starsGeometry.setAttribute(
+  'position',
+  new THREE.Float32BufferAttribute(positions, 3)
+);
+
+const starsMaterial = new THREE.PointsMaterial({
+  color: 0xffffff,
+  size: 0.7
+});
+
+const stars = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(stars);
+
+camera.position.z = 5;
+
+// ANIMACIÓN
+function animateGalaxy() {
+  requestAnimationFrame(animateGalaxy);
+
+  stars.rotation.y += 0.0005;
+  stars.rotation.x += 0.0002;
+
+  renderer.render(scene, camera);
+}
+
+animateGalaxy();
