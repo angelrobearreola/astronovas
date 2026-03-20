@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astronovas | Club Astronómico CBTIS 4</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<header>
+  <h1>Astronovas</h1>
+  <p>Club Astronómico CBTIS No. 4 | Lerdo, Durango</p>
+
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#astronomia">Astronomía</a>
+    <a href="#porque">¿Por qué unirte?</a>
+    <a href="#unete">Únete</a>
+  </nav>
+</header>
+
+<section id="inicio" class="hero fade">
+  <h2>Explora el Universo</h2>
+  <p>Ciencia, curiosidad y conocimiento más allá de la Tierra</p>
+  <button onclick="scrollToSection('unete')">Unirme</button>
+</section>
+
+<section id="astronomia" class="content fade">
+  <h2>El Universo</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Planetas</h3>
+      <p>Existen miles de mundos fuera de nuestro sistema solar llamados exoplanetas.</p>
+    </div>
+
+    <div class="card">
+      <h3>Galaxias</h3>
+      <p>La Vía Láctea contiene más de 100 mil millones de estrellas.</p>
+    </div>
+
+    <div class="card">
+      <h3>Agujeros Negros</h3>
+      <p>Deforman el espacio-tiempo y pueden tener masas millones de veces mayores que el Sol.</p>
+    </div>
+  </div>
+</section>
+
+<section id="porque" class="content fade">
+  <h2>¿Por qué unirte?</h2>
+
+  <ul class="benefits">
+    <li>🔭 Observaciones reales con telescopio</li>
+    <li>🧠 Desarrollo de pensamiento científico</li>
+    <li>🌌 Aprendizaje del universo real</li>
+    <li>👨‍🚀 Comunidad de estudiantes apasionados</li>
+  </ul>
+</section>
+
+<section id="unete" class="join fade">
+  <h2>Forma parte de Astronovas</h2>
+  <p>El universo te está esperando.</p>
+  <button onclick="joinAlert()">Quiero unirme</button>
+</section>
+
+<footer>
+  <p>© 2026 Astronovas | CBTIS No. 4</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
