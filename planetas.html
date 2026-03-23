@@ -3,231 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Solar 3D Avanzado</title>
+<title>Sistema Solar Realista</title>
+
 <style>
-    body { margin:0; overflow:hidden; font-family: Arial, sans-serif; background: #000; color: #fff; }
-    #info {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: rgba(0,0,0,0.7);
-        padding: 15px;
-        border-radius: 10px;
-        max-width: 300px;
-    }
-    #info h2 { margin-bottom: 10px; }
-    #info p { margin: 5px 0; font-size: 0.9em; }
-    canvas { display: block; }
-    .label {
-        color: #fff;
-        font-size: 14px;
-        font-weight: bold;
-        text-align: center;
-    }
+body {
+    margin:0;
+    overflow:hidden;
+    font-family: Arial;
+    background:#000;
+}
+
+/* Panel responsive */
+#info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.85);
+    color: gold;
+    padding: 15px;
+    box-sizing: border-box;
+    max-height: 40%;
+    overflow-y: auto;
+    border-top: 2px solid gold;
+}
+
+#info h2 { margin:0 0 10px 0; }
+canvas { display:block; }
 </style>
 </head>
+
 <body>
+
 <div id="info">
-    
+    <h2>Sistema Solar</h2>
+    <p>Toca un planeta para ver información</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
 
 <script>
-// Escena, cámara y renderer
+// ESCENA
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+// FONDO GALAXIA
+new THREE.TextureLoader().load(
+    "https://cdn.pixabay.com/photo/2016/03/31/19/56/galaxy-1293831_1280.jpg",
+    texture => scene.background = texture
+);
+
+// CÁMARA
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.set(0, 50, 120);
+
+// RENDER
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// CSS2D renderer para etiquetas
-const labelRenderer = new THREE.CSS2DRenderer();
-labelRenderer.setSize(window.innerWidth, window.innerHeight);
-labelRenderer.domElement.style.position = 'absolute';
-labelRenderer.domElement.style.top = '0px';
-document.body.appendChild(labelRenderer.domElement);
-
-// Controles
-const controls = new THREE.OrbitControls(camera, labelRenderer.domElement);
+// CONTROLES
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.1;
 
-// Sol
-const sunGeometry = new THREE.SphereGeometry(3, 32, 32);
-const sunMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
-const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+// LUZ
+const light = new THREE.PointLight(0xffffff, 2, 1000);
+scene.add(light);
+
+// INFO BOX
+const infoBox = document.getElementById("info");
+
+// RAYCASTER
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// SOL (más grande)
+const sun = new THREE.Mesh(
+    new THREE.SphereGeometry(10, 32, 32),
+    new THREE.MeshBasicMaterial({color:0xffcc00})
+);
 scene.add(sun);
 
-// Luz del Sol
-const pointLight = new THREE.PointLight(0xffffff, 2, 200);
-pointLight.position.set(0,0,0);
-scene.add(pointLight);
-
-// Datos de planetas
-const planetData = [
-    {name:"Mercurio", radius:0.38, distance:5, texture:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Mercury_in_true_color.jpg", info:"Diámetro: 4,879 km | Distancia al Sol: 57,9 millones km | Periodo orbital: 88 días | Composición: roca"},
-    {name:"Venus", radius:0.95, distance:7, texture:"https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg", info:"Diámetro: 12,104 km | Distancia al Sol: 108 millones km | Periodo orbital: 225 días | Composición: roca y atmósfera densa"},
-    {name:"Tierra", radius:1, distance:10, texture:"https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg", info:"Diámetro: 12,742 km | Distancia al Sol: 149,6 millones km | Periodo orbital: 365 días | Composición: roca, agua y atmósfera"},
-    {name:"Marte", radius:0.53, distance:13, texture:"https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg", info:"Diámetro: 6,779 km | Distancia al Sol: 227,9 millones km | Periodo orbital: 687 días | Composición: roca y hierro"},
-    {name:"Júpiter", radius:8.2, distance:18, texture:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg", info:"Diámetro: 139,820 km | Distancia al Sol: 778 millones km | Periodo orbital: 11,86 años | Composición: gas gigante"},
-    {name:"Saturno", radius:6.45, distance:24, texture:"https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg", info:"Diámetro: 116,460 km | Distancia al Sol: 1,429 millones km | Periodo orbital: 29,5 años | Composición: gas gigante"},
-    {name:"Urano", radius:3.1, distance:30, texture:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg", info:"Diámetro: 50,724 km | Distancia al Sol: 2,871 millones km | Periodo orbital: 84 años | Composición: gas y hielo"},
-    {name:"Neptuno", radius:2.50, distance:35, texture:"https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg", info:"Diámetro: 49,244 km | Distancia al Sol: 4,495 millones km | Periodo orbital: 165 años | Composición: gas y hielo"}
+// DATOS REALISTAS (ESCALA REDUCIDA)
+const data = [
+    {name:"Mercurio", size:0.5, dist:15, speed:0.04, info:"Planeta más cercano al Sol"},
+    {name:"Venus", size:0.9, dist:20, speed:0.03, info:"Planeta más caliente"},
+    {name:"Tierra", size:1, dist:25, speed:0.02, info:"Nuestro hogar"},
+    {name:"Marte", size:0.7, dist:30, speed:0.018, info:"Planeta rojo"},
+    {name:"Júpiter", size:3, dist:40, speed:0.01, info:"El más grande"},
+    {name:"Saturno", size:2.5, dist:50, speed:0.008, info:"Anillos espectaculares"},
+    {name:"Urano", size:2, dist:60, speed:0.006, info:"Gira de lado"},
+    {name:"Neptuno", size:2, dist:70, speed:0.005, info:"Muy frío"}
 ];
 
-// Crear planetas y etiquetas
 const planets = [];
-planetData.forEach(data=>{
-    const geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-    const texture = new THREE.TextureLoader().load(data.texture);
-    const material = new THREE.MeshStandardMaterial({map: texture});
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.x = data.distance;
-    mesh.userData = {info:data.info, name:data.name};
 
-    // Crear etiqueta
-    const div = document.createElement('div');
-    div.className = 'label';
-    div.textContent = data.name;
-    const label = new THREE.CSS2DObject(div);
-    label.position.set(0, data.radius + 0.5, 0);
-    mesh.add(label);
+// CREAR PLANETAS
+data.forEach((p,i)=>{
+    const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(p.size, 32, 32),
+        new THREE.MeshStandardMaterial({color:0x8888ff})
+    );
 
+    mesh.userData = p;
     scene.add(mesh);
     planets.push(mesh);
 
-    // --- Fondo de galaxia con textura ---
-const loader = new THREE.TextureLoader();
-loader.load('https://cdn.pixabay.com/photo/2016/03/31/19/56/galaxy-1293831_1280.jpg', function(texture){
-    scene.background = texture;
-});
-
-// --- Estrellas dinámicas ---
-const starGeometry = new THREE.BufferGeometry();
-const starCount = 500;
-const starVertices = [];
-for(let i=0;i<starCount;i++){
-    const x = (Math.random()-0.5)*400;
-    const y = (Math.random()-0.5)*400;
-    const z = (Math.random()-0.5)*400;
-    starVertices.push(x,y,z);
-}
-starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices,3));
-const starMaterial = new THREE.PointsMaterial({color:0xffffff, size:0.5});
-const stars = new THREE.Points(starGeometry, starMaterial);
-scene.add(stars);
-
-    // Órbita visual
-    const orbitGeometry = new THREE.RingGeometry(data.distance - 0.01, data.distance + 0.01, 64);
-    const orbitMaterial = new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide, transparent:true, opacity:0.2});
-    const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+    // ÓRBITA
+    const orbit = new THREE.Mesh(
+        new THREE.RingGeometry(p.dist-0.1, p.dist+0.1, 64),
+        new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide, transparent:true, opacity:0.2})
+    );
     orbit.rotation.x = Math.PI/2;
     scene.add(orbit);
+
+    // 🌙 LUNA (solo Tierra)
+    if(p.name === "Tierra"){
+        const moon = new THREE.Mesh(
+            new THREE.SphereGeometry(0.3,16,16),
+            new THREE.MeshStandardMaterial({color:0xaaaaaa})
+        );
+        mesh.add(moon);
+        moon.position.x = 2;
+    }
 });
 
-// Asteroides
-const asteroids = [];
-for(let i=0; i<200; i++){
-    const geo = new THREE.SphereGeometry(Math.random()*0.05, 6, 6);
-    const mat = new THREE.MeshBasicMaterial({color:0x888888});
-    const a = new THREE.Mesh(geo, mat);
-    a.position.set(Math.random()*60-30, Math.random()*10-5, Math.random()*60-30);
-    scene.add(a);
-    asteroids.push(a);
-}
-
-// Cámara
-camera.position.set(0,20,70);
-
-// Detectar click o touch
-function onClickOrTouch(event){
-    let x, y;
-    if(event.touches){ // touch
-        x = event.touches[0].clientX;
-        y = event.touches[0].clientY;
-    } else { // mouse
-        x = event.clientX;
-        y = event.clientY;
-    }
-    mouse.x = (x/window.innerWidth)*2 - 1;
-    mouse.y = -(y/window.innerHeight)*2 + 1;
-
-    raycaster.setFromCamera(mouse,camera);
-    const intersects = raycaster.intersectObjects(planets);
-    if(intersects.length>0){
-        const p = intersects[0].object;
-        infoBox.innerHTML = `<h2>${p.userData.name}</h2><p>${p.userData.info}</p>`;
-    }
-}
-
-window.addEventListener('click', onClickOrTouch);
-window.addEventListener('touchstart', onClickOrTouch);
-
-// Raycaster para clic
-function onClickOrTouch(event){
-    let x, y;
-
-    if(event.touches){ // Evento táctil
-        x = event.touches[0].clientX;
-        y = event.touches[0].clientY;
-    } else { // Evento mouse
-        x = event.clientX;
-        y = event.clientY;
-    }
-
-    // Convertir a coordenadas normalizadas de Three.js
-    mouse.x = (x / window.innerWidth) * 2 - 1;
-    mouse.y = -(y / window.innerHeight) * 2 + 1;
+// CLICK
+function click(event){
+    mouse.x = (event.clientX / window.innerWidth)*2 -1;
+    mouse.y = -(event.clientY / window.innerHeight)*2 +1;
 
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(planets);
-    if(intersects.length > 0){
-        const p = intersects[0].object;
-        infoBox.innerHTML = `<h2>${p.userData.name}</h2><p>${p.userData.info}</p>`;
+    const hit = raycaster.intersectObjects(planets);
+
+    if(hit.length > 0){
+        const p = hit[0].object.userData;
+        infoBox.innerHTML = `
+            <h2>${p.name}</h2>
+            <p>${p.info}</p>
+        `;
     }
 }
 
-// Para desktop
-window.addEventListener('click', onClickOrTouch);
-// Para dispositivos táctiles
-window.addEventListener('touchstart', onClickOrTouch);
+window.addEventListener("click", click);
+window.addEventListener("touchstart", e=>{
+    click(e.touches[0]);
+});
 
-// Animación
+// ANIMACIÓN
 function animate(){
     requestAnimationFrame(animate);
 
-    const time = Date.now() * 0.0001;
-    planets.forEach((planet, index)=>{
-        planet.rotation.y += 0.001;
-        const angle = time * (index+1) * 2;
-        planet.position.x = planetData[index].distance * Math.cos(angle);
-        planet.position.z = planetData[index].distance * Math.sin(angle);
-    });
+    const t = Date.now()*0.0005;
 
-    // Asteroides movimiento lento
-    asteroids.forEach(a=>{
-        a.rotation.x += 0.01;
-        a.rotation.y += 0.01;
+    planets.forEach((p,i)=>{
+        const d = data[i];
+        p.position.x = Math.cos(t * d.speed * 50) * d.dist;
+        p.position.z = Math.sin(t * d.speed * 50) * d.dist;
+        p.rotation.y += 0.01;
     });
 
     controls.update();
-    renderer.render(scene, camera);
-    labelRenderer.render(scene, camera);
+    renderer.render(scene,camera);
 }
 
 animate();
 
-// Resize
-window.addEventListener('resize', ()=>{
+// RESIZE
+window.addEventListener("resize", ()=>{
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
-stars.rotation.y += 0.0003; // gira lentamente
 });
 </script>
+
 </body>
 </html>

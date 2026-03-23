@@ -62,3 +62,6 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+function abrirSobre() {
+    window.open("sobre.html", "_blank");
+}

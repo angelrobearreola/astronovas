@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sobre Astronovas</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: gold;
+    overflow: hidden;
+    background: black;
+}
+
+/* Fondo galaxia animado */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Contenido */
+.contenido {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: auto;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="galaxia"></canvas>
+
+<div class="contenido">
+    <h1>ASTRONOVAS</h1>
+
+    <p>
+        Somos un club astronómico perteneciente al 
+        <strong>Centro de Bachillerato Tecnológico Industrial y de Servicios No. 4 (CBTis 4)</strong>.
+    </p>
+
+    <p>
+        Nuestro objetivo es fomentar el interés por la astronomía, la ciencia y la exploración del universo.
+    </p>
+
+    <p>
+        Director de la institución: <strong>Efrén Pérez Ortega</strong>
+    </p>
+
+    <p>
+        Colaboramos activamente con el grupo astronómico de Gómez Palacio, fortaleciendo el aprendizaje y la divulgación científica.
+    </p>
+</div>
+
+<script>
+const canvas = document.getElementById("galaxia");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let estrellas = [];
+
+for (let i = 0; i < 200; i++) {
+    estrellas.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        z: Math.random() * canvas.width
+    });
+}
+
+function animar() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < estrellas.length; i++) {
+        let e = estrellas[i];
+
+        e.z -= 2;
+        if (e.z <= 0) e.z = canvas.width;
+
+        let k = 128.0 / e.z;
+        let px = e.x * k + canvas.width / 2;
+        let py = e.y * k + canvas.height / 2;
+
+        let size = (1 - e.z / canvas.width) * 3;
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(px, py, size, size);
+    }
+
+    requestAnimationFrame(animar);
+}
+
+animar();
+</script>
+
+</body>
+</html>
