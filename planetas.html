@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Solar Realista</title>
+<title>Sistema Solar PRO</title>
 
 <style>
 body {
@@ -13,7 +13,6 @@ body {
     background:#000;
 }
 
-/* Panel responsive */
 #info {
     position: absolute;
     bottom: 0;
@@ -53,8 +52,8 @@ new THREE.TextureLoader().load(
 );
 
 // CÁMARA
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-camera.position.set(0, 50, 120);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 3000);
+camera.position.set(0, 70, 160);
 
 // RENDER
 const renderer = new THREE.WebGLRenderer({antialias:true});
@@ -65,9 +64,11 @@ document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// LUZ
-const light = new THREE.PointLight(0xffffff, 2, 1000);
+// LUCES
+const light = new THREE.PointLight(0xffffff, 3, 2000);
 scene.add(light);
+const ambient = new THREE.AmbientLight(0x555555);
+scene.add(ambient);
 
 // INFO BOX
 const infoBox = document.getElementById("info");
@@ -76,55 +77,115 @@ const infoBox = document.getElementById("info");
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-// SOL (más grande)
+// ⭐ ESTRELLAS
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 800;
+const starPositions = [];
+
+for(let i=0;i<starCount;i++){
+    starPositions.push(
+        (Math.random()-0.5)*2000,
+        (Math.random()-0.5)*2000,
+        (Math.random()-0.5)*2000
+    );
+}
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions,3));
+
+const starMaterial = new THREE.PointsMaterial({
+    color:0xffffff,
+    size:1,
+    transparent:true,
+    opacity:0.8
+});
+
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// ☀️ SOL
 const sun = new THREE.Mesh(
-    new THREE.SphereGeometry(10, 32, 32),
+    new THREE.SphereGeometry(14, 32, 32),
     new THREE.MeshBasicMaterial({color:0xffcc00})
 );
 scene.add(sun);
 
-// DATOS REALISTAS (ESCALA REDUCIDA)
+// DATOS
 const data = [
-    {name:"Mercurio", size:0.5, dist:15, speed:0.04, info:"Planeta más cercano al Sol"},
-    {name:"Venus", size:0.9, dist:20, speed:0.03, info:"Planeta más caliente"},
-    {name:"Tierra", size:1, dist:25, speed:0.02, info:"Nuestro hogar"},
-    {name:"Marte", size:0.7, dist:30, speed:0.018, info:"Planeta rojo"},
-    {name:"Júpiter", size:3, dist:40, speed:0.01, info:"El más grande"},
-    {name:"Saturno", size:2.5, dist:50, speed:0.008, info:"Anillos espectaculares"},
-    {name:"Urano", size:2, dist:60, speed:0.006, info:"Gira de lado"},
-    {name:"Neptuno", size:2, dist:70, speed:0.005, info:"Muy frío"}
+{name:"Mercurio", color:0xaaaaaa, size:0.6, dist:20, speed:0.04,
+info:"Velocidad: 47.4 km/s\nSin lunas\nExtremadamente caliente"},
+{name:"Venus", color:0xffcc99, size:1, dist:26, speed:0.03,
+info:"Velocidad: 35 km/s\nSin lunas\nEfecto invernadero extremo"},
+{name:"Tierra", color:0x3399ff, size:1.2, dist:32, speed:0.02,
+info:"Velocidad: 29.7 km/s\n1 luna\nAgua líquida"},
+{name:"Marte", color:0xff3300, size:0.8, dist:38, speed:0.018,
+info:"Velocidad: 24 km/s\n2 lunas"},
+{name:"Júpiter", color:0xff9966, size:4, dist:50, speed:0.01,
+info:"79 lunas\nGran Mancha Roja"},
+{name:"Saturno", color:0xffcc66, size:3.5, dist:62, speed:0.008,
+info:"82 lunas\nAnillos visibles"},
+{name:"Urano", color:0x66ffff, size:3, dist:74, speed:0.006,
+info:"27 lunas\nGira de lado"},
+{name:"Neptuno", color:0x3366ff, size:3, dist:86, speed:0.005,
+info:"14 lunas\nVientos más rápidos"}
 ];
 
 const planets = [];
 
 // CREAR PLANETAS
 data.forEach((p,i)=>{
+
     const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(p.size, 32, 32),
-        new THREE.MeshStandardMaterial({color:0x8888ff})
+        new THREE.SphereGeometry(p.size,32,32),
+        new THREE.MeshStandardMaterial({color:p.color})
     );
 
     mesh.userData = p;
     scene.add(mesh);
     planets.push(mesh);
 
-    // ÓRBITA
+    // LUNAS
+    const moonCount = i < 2 ? 0 : Math.min(i,4);
+    for(let m=0;m<moonCount;m++){
+        const moon = new THREE.Mesh(
+            new THREE.SphereGeometry(0.25,16,16),
+            new THREE.MeshStandardMaterial({color:0xaaaaaa})
+        );
+        moon.position.x = 2 + m;
+        mesh.add(moon);
+    }
+
+    // ANILLO SATURNO
+    if(p.name === "Saturno"){
+        const ring = new THREE.Mesh(
+            new THREE.RingGeometry(5,8,64),
+            new THREE.MeshBasicMaterial({color:0xffcc99, side:THREE.DoubleSide})
+        );
+        ring.rotation.x = Math.PI/2;
+        mesh.add(ring);
+    }
+
+    // NOMBRE
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText(p.name,10,30);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({map:texture}));
+    sprite.scale.set(6,2,1);
+    sprite.position.y = p.size + 2;
+
+    mesh.add(sprite);
+
+    // ORBITA
     const orbit = new THREE.Mesh(
-        new THREE.RingGeometry(p.dist-0.1, p.dist+0.1, 64),
-        new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide, transparent:true, opacity:0.2})
+        new THREE.RingGeometry(p.dist-0.1, p.dist+0.1,64),
+        new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.2,side:THREE.DoubleSide})
     );
     orbit.rotation.x = Math.PI/2;
     scene.add(orbit);
 
-    // 🌙 LUNA (solo Tierra)
-    if(p.name === "Tierra"){
-        const moon = new THREE.Mesh(
-            new THREE.SphereGeometry(0.3,16,16),
-            new THREE.MeshStandardMaterial({color:0xaaaaaa})
-        );
-        mesh.add(moon);
-        moon.position.x = 2;
-    }
 });
 
 // CLICK
@@ -137,17 +198,16 @@ function click(event){
 
     if(hit.length > 0){
         const p = hit[0].object.userData;
+
         infoBox.innerHTML = `
-            <h2>${p.name}</h2>
-            <p>${p.info}</p>
+        <h2>${p.name}</h2>
+        <p style="white-space: pre-line;">${p.info}</p>
         `;
     }
 }
 
 window.addEventListener("click", click);
-window.addEventListener("touchstart", e=>{
-    click(e.touches[0]);
-});
+window.addEventListener("touchstart", e=> click(e.touches[0]));
 
 // ANIMACIÓN
 function animate(){
@@ -161,6 +221,10 @@ function animate(){
         p.position.z = Math.sin(t * d.speed * 50) * d.dist;
         p.rotation.y += 0.01;
     });
+
+    // MOVIMIENTO ESTRELLAS
+    stars.rotation.y += 0.0004;
+    stars.rotation.x += 0.0002;
 
     controls.update();
     renderer.render(scene,camera);

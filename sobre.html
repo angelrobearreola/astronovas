@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sobre Astronovas</title>
 
 <style>
@@ -9,11 +10,11 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     color: gold;
-    overflow: hidden;
     background: black;
+    overflow-x: hidden;
 }
 
-/* Fondo galaxia animado */
+/* Canvas galaxia */
 canvas {
     position: fixed;
     top: 0;
@@ -21,22 +22,66 @@ canvas {
     z-index: -1;
 }
 
-/* Contenido */
-.contenido {
-    text-align: center;
-    padding: 80px 20px;
+/* Contenedor principal */
+.contenedor {
+    padding: 60px 20px;
+    max-width: 1100px;
+    margin: auto;
 }
 
+/* Título */
 h1 {
-    font-size: 40px;
-    margin-bottom: 20px;
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 30px;
 }
 
+/* Secciones */
+.seccion {
+    margin-bottom: 50px;
+    background: rgba(0,0,0,0.6);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255,215,0,0.2);
+}
+
+/* Texto */
 p {
     font-size: 18px;
-    max-width: 800px;
-    margin: auto;
-    line-height: 1.6;
+    line-height: 1.8;
+}
+
+/* Imágenes */
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.galeria img {
+    width: 100%;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.galeria img:hover {
+    transform: scale(1.05);
+}
+
+/* Logo */
+.logo {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 90px;
+    opacity: 0.8;
+}
+
+/* Responsive */
+@media(max-width:600px){
+    h1 { font-size: 35px; }
+    p { font-size: 16px; }
 }
 </style>
 </head>
@@ -45,44 +90,72 @@ p {
 
 <canvas id="galaxia"></canvas>
 
-<div class="contenido">
+<div class="contenedor">
+
     <h1>ASTRONOVAS</h1>
 
-    <p>
-        Somos un club astronómico perteneciente al 
-        <strong>Centro de Bachillerato Tecnológico Industrial y de Servicios No. 4 (CBTis 4)</strong>.
-    </p>
+    <div class="seccion">
+        <p>
+            Somos un club astronómico perteneciente al 
+            <strong>Centro de Bachillerato Tecnológico Industrial y de Servicios No. 4 (CBTis 4)</strong>.
+        </p>
 
-    <p>
-        Nuestro objetivo es fomentar el interés por la astronomía, la ciencia y la exploración del universo.
-    </p>
+        <p>
+            Nuestro objetivo es fomentar el interés por la astronomía, la ciencia y la exploración del universo mediante actividades dinámicas, observaciones y proyectos innovadores.
+        </p>
+    </div>
 
-    <p>
-        Director de la institución: <strong>Efrén Pérez Ortega</strong>
-    </p>
+    <div class="seccion">
+        <p>
+            Director de la institución:<br>
+            <strong>Efrén Pérez Ortega</strong>
+        </p>
 
-    <p>
-        Colaboramos activamente con el grupo astronómico de Gómez Palacio, fortaleciendo el aprendizaje y la divulgación científica.
-    </p>
+        <p>
+            Colaboramos activamente con el grupo astronómico de Gómez Palacio, fortaleciendo el aprendizaje, la investigación y la divulgación científica.
+        </p>
+    </div>
+
+    <div class="seccion">
+        <h2>Institución</h2>
+
+        <div class="galeria">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Escuela_ejemplo.jpg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/School_building.jpg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Classroom.jpg">
+        </div>
+    </div>
+
 </div>
 
+<!-- Logo -->
+<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Logo_SEP.png/200px-Logo_SEP.png">
+
 <script>
+// CANVAS
 const canvas = document.getElementById("galaxia");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// AJUSTAR TAMAÑO
+function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
+// ESTRELLAS
 let estrellas = [];
 
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 400; i++) {
     estrellas.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: (Math.random() - 0.5) * canvas.width,
+        y: (Math.random() - 0.5) * canvas.height,
         z: Math.random() * canvas.width
     });
 }
 
+// ANIMACIÓN
 function animar() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -94,13 +167,13 @@ function animar() {
         if (e.z <= 0) e.z = canvas.width;
 
         let k = 128.0 / e.z;
-        let px = e.x * k + canvas.width / 2;
-        let py = e.y * k + canvas.height / 2;
+        let x = e.x * k + canvas.width / 2;
+        let y = e.y * k + canvas.height / 2;
 
         let size = (1 - e.z / canvas.width) * 3;
 
         ctx.fillStyle = "white";
-        ctx.fillRect(px, py, size, size);
+        ctx.fillRect(x, y, size, size);
     }
 
     requestAnimationFrame(animar);
