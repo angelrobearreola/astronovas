@@ -72,15 +72,51 @@ ul li {
     margin: 10px 0;
 }
 
-/* Imagen centrada */
+/* Imagen centrada (por si usas una sola) */
 .image-center {
     max-width: 100%;
     margin-top: 20px;
     border-radius: 15px;
 }
 
+/* 🔥 GALERÍA PRO */
+.galeria {
+    display: flex;
+    justify-content: center;   /* centra horizontal */
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;           /* responsive */
+    margin-top: 20px;
+}
 
-/* Botón para ver planetas */
+.galeria img {
+    width: 250px;              /* tamaño controlado */
+    height: 180px;
+    object-fit: cover;         /* recorte elegante */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* efecto hover pro */
+.galeria img:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(0,255,255,0.6);
+}
+
+/* 🔥 LOGO CENTRADO */
+.logo {
+    display: block;
+    margin: 20px auto;  /* lo centra */
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+/* Botón 3D */
 .btn-3d {
     display: inline-block;
     padding: 15px 30px;
@@ -97,6 +133,7 @@ ul li {
     box-shadow: 0 0 20px #00ffff;
 }
 
+/* Formularios */
 form input, form textarea {
     padding: 10px;
     border: none;
@@ -125,6 +162,8 @@ footer {
     padding: 20px;
     background: rgba(0,0,0,0.6);
 }
+
+/* Botón sobre */
 .btn-sobre {
     background: linear-gradient(45deg, #000, #1a1a1a);
     color: gold;
